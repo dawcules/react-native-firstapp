@@ -33,21 +33,22 @@ const mediaArray = [
 
 const App = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <FlatList
     data={mediaArray}
     renderItem={({item}) => {
       return (
-        <TouchableOpacity>
-          <Image
-            style={{width: 100, height: 100}}
+        <View style ={{marginTop: 10}}>
+        <TouchableOpacity style={{flex: 2, flexWrap: 'wrap', flexDirection: 'row', padding: 10, marginBottom: 10, backgroundColor: 'lightgray'}}>
+             <Image style={{flex: 1, padding: 5, marginRight: 15}}
             source={{uri: item.thumbnails.w160}}
           />
-          <View>
-            <Text>{item.title}</Text>
+          <View style = {{flex: 1}}>
+            <Text style={{fontWeight :'800', fontSize: 35}}>{item.title}</Text>
             <Text>{item.description}</Text>
           </View>
         </TouchableOpacity>
+        </View>
       );
     }}
   />

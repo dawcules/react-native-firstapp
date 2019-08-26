@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList, Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import List from './components/List';
 
 const mediaArray = [
   {
@@ -34,24 +35,7 @@ const mediaArray = [
 const App = () => {
   return (
     <View>
-      <FlatList
-    data={mediaArray}
-    renderItem={({item}) => {
-      return (
-        <View style ={{marginTop: 10}}>
-        <TouchableOpacity style={{flex: 2, flexWrap: 'wrap', flexDirection: 'row', padding: 10, marginBottom: 10, backgroundColor: 'lightgray'}}>
-             <Image style={{flex: 1, padding: 5, marginRight: 15}}
-            source={{uri: item.thumbnails.w160}}
-          />
-          <View style = {{flex: 1}}>
-            <Text style={{fontWeight :'800', fontSize: 35}}>{item.title}</Text>
-            <Text>{item.description}</Text>
-          </View>
-        </TouchableOpacity>
-        </View>
-      );
-    }}
-  />
+      <List mediaArray={mediaArray}></List>
     </View>
   );
 };

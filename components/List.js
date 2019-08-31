@@ -1,14 +1,32 @@
 import React from 'react';
-import {FlatList, Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {useContext, useState, useEffect} from 'react';
+// eslint-disable-next-line max-len
+import {FlatList, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import ListItem from './ListItem';
+import {MediaContext} from '../contexts/MediaContext';
+import Data from './Data';
 
-const List = (props) => {
+
+const List = () => {
+  const [media, setMedia] = useContext(MediaContext);
+
+  const getData = () => {
+    fetch('https://raw.githubusercontent.com/mattpe/wbma/master/docs/assets/test.json')
+    .then((response) => {
+      return response.json();
+    })
+    .then((result) => {
+      setMedia(result);
+    });
+  };
+  useEffect(() => getData(), []);
+
   return (
-    <FlatList
-      data={props.mediaArray}
-      renderItem={({item}) => <ListItem singleMedia={item} />}
-    />
+      <FlatList
+        data={media}
+        renderItem={({item}) => <ListItem singleMedia={item} />}
+      />
   );
 };
 

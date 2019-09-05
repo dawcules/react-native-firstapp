@@ -1,32 +1,28 @@
 import React from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
-import List from './components/List';
+import Home from './views/Home.js';
 import {MediaProvider} from './contexts/MediaContext';
+import Navigator from './navigators/Navigator';
 
 
 const App = () => {
   return (
-    <MediaProvider style={{flex: 6}}>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightyellow'}}>
-        <Text style ={{fontWeight: 700, fontSize: 40}}>Newsfeed</Text>
-      </View>
-      <View style={{position: 'absolute', left: 5, top: 31}}>
-        <Image style={{height: 45, width: 45}} source={{uri: 'https://cdn4.iconfinder.com/data/icons/mono-color-web-mobile/250/Home-512.png'}} />
-      </View>
-      <View style={{flex: 5}}>
-        <List />
-      </View>
+    <MediaProvider>
+      <Navigator></Navigator>
     </MediaProvider>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
 export default App;
+
+// const UseFetch = (url) => {
+//   const [media, setMedia] = useContext(StateCOntext);
+//   const [loading, setLoading] = useState(true);
+//   const fetchUrl = async () => {
+//     const response = await fetch(url);
+//     const json = await response.json();
+//     setMedia(json);
+//     setLoading(false);
+//   };
+//   UseEffect(fetchUrl, []);
+//   return [media, loading]
+// };

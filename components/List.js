@@ -7,7 +7,7 @@ import ListItem from './ListItem';
 import {MediaContext} from '../contexts/MediaContext';
 
 
-const List = () => {
+const List = (props) => {
   const [media, setMedia] = useContext(MediaContext);
 
   const getData = () => {
@@ -28,7 +28,6 @@ const List = () => {
                 })
                 .then((result) => {
                   result.thumbnails.w160 = picLink + result.thumbnails.w160;
-                  console.log(result.thumbnails.w160);
                   mediaArray.push(result);
                   setMedia(mediaArray);
                 });
@@ -40,7 +39,7 @@ const List = () => {
   return (
     <FlatList
       data={media}
-      renderItem={({item}) => <ListItem singleMedia={item} />}
+      renderItem={({item}) => <ListItem navigation={props.navigation} singleMedia={item} />}
     />
   );
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import Home from './views/Home.js';
 import {MediaProvider} from './contexts/MediaContext';
 import Navigator from './navigators/Navigator';
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import {useContext, useEffect} from 'react';
-// eslint-disable-next-line max-len
 import {FlatList} from 'react-native';
 import PropTypes from 'prop-types';
 import ListItem from './ListItem';
@@ -39,7 +38,8 @@ const List = (props) => {
   return (
     <FlatList
       data={media}
-      renderItem={({item}) => <ListItem navigation={props.navigation} singleMedia={item} />}
+      renderItem={({item}) => <ListItem navigation={props.navigation}
+        singleMedia={item} />}
     />
   );
 };

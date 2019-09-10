@@ -1,7 +1,6 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {View} from 'react-native';
 import List from '../components/List';
-
 
 const Home = (props) => {
   const {navigation} = props;
@@ -11,16 +10,6 @@ const Home = (props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-
 
 export default Home;
 

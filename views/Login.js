@@ -1,12 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Button,
-  AsyncStorage,
-  Alert,
-} from 'react-native';
+import {StyleSheet, View, Text, Button, AsyncStorage, Alert} from 'react-native';
 import FormTextInput from '../components/FormTextInput';
 import useSignUpForm from '../hooks/LoginHooks';
 import validate from 'validate.js';
@@ -18,6 +11,14 @@ const avatarUrl = 'http://media.mw.metropolia.fi/wbma/tags/avatar_2204';
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/media/';
 
 const Login = (props) => {
+  const {
+    inputs,
+    handleUsernameChange,
+    handlePasswordChange,
+    handlePasswordConfChange,
+    handleEmailChange,
+    handleFormChange,
+  } = useSignUpForm();
   const {navigation} = props;
 
   const checkUser = async (uname) => {
@@ -44,7 +45,40 @@ const Login = (props) => {
     }
   };
 
+  const signInAsync = async (inputs, props) => {
+    console.log(props.inputs);
+    console.log(inputs.password);
+    const data = {
+      username: inputs.username,
+      password: inputs.password,
+    };
+    console.log(data);
+    const response = await fetch(loginUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    console.log(result);
+    await console.log(result.user.username);
+    await AsyncStorage.setItem('userToken', result.token);
+    await AsyncStorage.setItem('username', result.user.username);
+    await AsyncStorage.setItem('useremail', result.user.email);
+    await AsyncStorage.setItem('userid', JSON.stringify(result.user.user_id));
+    fetchAvatar();
+    navigation.navigate('App');
+  };
+
   const SignUpForm = () => {
+    const {
+      inputs,
+      handleUsernameChange,
+      handlePasswordChange,
+      handlePasswordConfChange,
+      handleEmailChange,
+    } = useSignUpForm();
     return (
       <View style={styles.container}>
         <Text>Register</Text>
@@ -79,7 +113,7 @@ const Login = (props) => {
             onChangeText={handleEmailChange}
             value= {inputs.email} required
           />
-          <Button title="Sign up!" onPress={regValidation} />
+          <Button title="Sign up!" onPress={() => regValidation(inputs, props)} />
           <Button title="Sign in instead!" onPress={() => handleFormChange(<SignInForm />)} />
         </View>
       </View>
@@ -87,6 +121,11 @@ const Login = (props) => {
   };
 
   const SignInForm = () => {
+    const {
+      inputs,
+      handleUsernameChange,
+      handlePasswordChange,
+    } = useSignUpForm();
     return (
       <View style={styles.container}>
         <Text>Login</Text>
@@ -104,54 +143,14 @@ const Login = (props) => {
             onChangeText={handlePasswordChange}
             value={inputs.password} required
           />
-          <Button title="Sign in!" onPress={signInAsync} />
+          <Button title="Sign in!" onPress={() => signInAsync(inputs, props)} />
           <Button title="Sign up instead!" onPress={() => handleFormChange(<SignUpForm />)} />
         </View>
       </View>
     );
   };
 
-  const {
-    inputs,
-    handleUsernameChange,
-    handlePasswordChange,
-    handlePasswordConfChange,
-    handleEmailChange,
-    handleFormChange,
-  } = useSignUpForm();
-
-  useEffect(() => {
-    handleFormChange(<SignInForm />);
-  }
-  , []);
-
-  const signInAsync = async (props) => {
-    console.log(inputs.username);
-    console.log(inputs.password);
-    const data = {
-      username: await inputs.username,
-      password: await inputs.password,
-    };
-    console.log(data);
-    const response = await fetch(loginUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    const result = await response.json();
-    console.log(result);
-    await console.log(result.user.username);
-    await AsyncStorage.setItem('userToken', result.token);
-    await AsyncStorage.setItem('username', result.user.username);
-    await AsyncStorage.setItem('useremail', result.user.email);
-    await AsyncStorage.setItem('userid', JSON.stringify(result.user.user_id));
-    fetchAvatar();
-    navigation.navigate('App');
-  };
-
-  const signUpAsync = async (props) => {
+  const signUpAsync = async (inputs, props) => {
     const data = {
       username: inputs.username,
       password: inputs.password,
@@ -166,7 +165,7 @@ const Login = (props) => {
     });
     const result = await response.json();
     console.log('REKKAUS', result);
-    signInAsync();
+    signInAsync(inputs, props);
   };
 
   const fetchAvatar = async (props) => {
@@ -195,15 +194,61 @@ const Login = (props) => {
     await AsyncStorage.setItem('useravatar', JSON.stringify(aFileResult));
   };
 
-  const regValidation = async () => {
-    console.log('validemail ', inputs.email);
-    const emailError = validate(validation['email'], inputs.email);
-    // const passwordError = validate('password', inputs.password)
-    if (!emailError) {
-      alert('Details are valid!');
+  const regValidation = async (inputs, props) => {
+    const constraints = {
+      email: {
+        presence: {
+          message: '^Please enter an email address',
+        },
+        email: {
+          message: '^Please enter a valid email address',
+        },
+      },
+      password: {
+        presence: {
+          message: '^Please enter a password',
+        },
+        length: {
+          minimum: 5,
+          message: '^Your password must be at least 5 characters',
+        },
+      },
+      username: {
+        presence: {
+          message: '^Please enter an username',
+        },
+        length: {
+          minimum: 3,
+          message: '^Username must be at least 3 characters',
+        },
+      },
+      confirmPassword: {
+        equality: 'password',
+      },
+    };
+    const emailError = validate({email: inputs.email}, constraints);
+    const passwordError = validate({password: inputs.password}, constraints);
+    const passconfError = validate({password: inputs.password, confirmPassword: inputs.passwordconf}, constraints);
+    const usernameError = validate({username: inputs.username}, constraints);
+
+    console.log(emailError.email, passwordError.password, usernameError.username, passconfError.confirmPassword);
+    if (!emailError.email && !passwordError.password && !usernameError.username && !passconfError.confirmPassword) {
+      signUpAsync(inputs, props);
+      console.log('KAIKKI OIKEIN = REKISTERÖI');
+    } else {
+      const errorArr = [emailError.email, passwordError.password, usernameError.username, passconfError.confirmPassword];
+      for (let i=0; i< errorArr.length; i++) {
+        if (errorArr[i]) {
+          alert(errorArr[i]);
+        }
+      }
     }
-    // signUpAsync();
   };
+
+  useEffect(() => {
+    handleFormChange(<SignInForm />);
+  }
+  , []);
 
   return (
     <View style ={{flex: 2}}>

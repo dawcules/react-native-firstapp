@@ -9,12 +9,14 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import AuthLoading from '../views/AuthLoading';
 import Login from '../views/Login';
+import Uploads from '../views/Uploads';
 
 
 const TabNavigator = createBottomTabNavigator(
     {
       Home,
       Profile,
+      Uploads,
     },
     {
       defaultNavigationOptions: ({navigation}) => ({

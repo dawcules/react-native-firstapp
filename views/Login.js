@@ -3,7 +3,6 @@ import {StyleSheet, View, Text, Button, AsyncStorage, Alert} from 'react-native'
 import FormTextInput from '../components/FormTextInput';
 import useSignUpForm from '../hooks/LoginHooks';
 import validate from 'validate.js';
-import validation from '../validation/validation';
 
 const loginUrl = 'http://media.mw.metropolia.fi/wbma/login/';
 const regUrl = 'http://media.mw.metropolia.fi/wbma/users/';
@@ -13,10 +12,6 @@ const mediaUrl = 'http://media.mw.metropolia.fi/wbma/media/';
 const Login = (props) => {
   const {
     inputs,
-    handleUsernameChange,
-    handlePasswordChange,
-    handlePasswordConfChange,
-    handleEmailChange,
     handleFormChange,
   } = useSignUpForm();
   const {navigation} = props;

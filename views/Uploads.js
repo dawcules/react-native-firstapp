@@ -66,7 +66,7 @@ const Uploads = (props) => {
         <Button onPress={() => pickImage()}>
           <Text>Show image</Text>
         </Button>
-        <Button onPress={() => handleUpload(image.selected)}>
+        <Button onPress={() => handleUpload(image.selected).then(props.navigation.navigate('Home'))}>
           <Text>Upload</Text>
         </Button>
       </Content>

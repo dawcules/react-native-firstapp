@@ -46,6 +46,10 @@ const useUploadForm = () => {
     // TÄNNE
   };
 
+  const clearForm = () => {
+    setUpload("");
+  };
+
   // const handleFormChange = (form) => {
   //   setInputs((inputs) =>
   //     ({
@@ -58,6 +62,7 @@ const useUploadForm = () => {
     handleDescChange,
     handleUpload,
     upload,
+    clearForm,
   };
 };
 

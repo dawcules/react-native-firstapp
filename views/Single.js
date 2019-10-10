@@ -1,5 +1,9 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Image, AsyncStorage} from 'react-native';
+import {StyleSheet, View, Image, AsyncStorage} from 'react-native';
+import {Container, Content, Text, Card, CardItem, H2, Body} from 'native-base';
+import AImage from '../components/AsyncImage';
+
+
 import {Video} from 'expo-av';
 
 const Single = (props) => {
@@ -35,22 +39,46 @@ const Single = (props) => {
   checkUser();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <Text>{media.description}</Text>
-      <Text>{uname.name}</Text>
-      <Image style={styles.image} source={{uri: media.thumbnails.w160}} />
-      <Video
-        source={{uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'}}
-        rate={1.0}
-        volume={1.0}
-        isMuted={false}
-        resizeMode="cover"got
-        shouldPlay
-        isLooping
-        style={{width: 300, height: 300}}
-      />
-    </View>
+
+    <Container>
+      <Content>
+        <Card>
+          <CardItem>
+            <Body>
+              <H2>{title}</H2>
+              <Text note>by: {name.username}</Text>
+            </Body>
+          </CardItem>
+          <CardItem>
+            <Body>
+              {media.media_type === 'image' &&
+                <AImage
+                  source={{uri: 'http://media.mw.metropolia.fi/wbma/uploads/' + file.filename}}
+                  style={{
+                    borderRadius: 50,
+                    width: '100%',
+                    height: 500,
+                  }}
+                  spinnerColor='#b3e5fc'
+                />
+              }
+              {media.media_type === 'video' &&
+                <Video source={{uri: 'http://media.mw.metropolia.fi/wbma/uploads/' + file.filename}}
+                  style={{
+                    width: '100%',
+                    height: 500,
+                  }}
+                  useNativeControls={true}
+                />
+              }
+            </Body>
+          </CardItem>
+          <CardItem>
+            <Text>{media.description}</Text>
+          </CardItem>
+        </Card>
+      </Content>
+    </Container>
   );
 };
 
